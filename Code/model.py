@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
 from sklearn.model_selection import train_test_split
-
+#this program closely follows the steps delineated in the tutorial:https://www.datacamp.com/tutorial/random-forests-classifier-python
 #Preprocessing
  #1. Load data
 labels = pd.read_csv('Data\metadata.csv',usecols=["Sample_ID","azm_sr"])
