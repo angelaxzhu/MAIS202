@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import joblib
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, ConfusionMatrixDisplay
@@ -17,8 +18,6 @@ features_azm = pd.read_csv('Data\zm_sr_gwas_filtered_unitigs.Rtab',sep=' ',index
 features_cfz =pd.read_csv('Data\cfx_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col = 0)
 features_cip=pd.read_csv('Data\cip_sr_gwas_filtered_unitigs.Rtab', sep=' ', index_col=0)
 
-print(features_azm.shape)
-print(labels_azm.shape)
  
   #2. Join the features together in case there are redundant unitigs
 features_azm_cfz = pd.merge(features_azm,features_cfz, how = 'outer',on= 'pattern_id')
@@ -80,7 +79,6 @@ print(labels_prediction)
 def text(labels_prediction):
     txt_labels_prediction = []
     sample_label = 0
-    print(len(labels_prediction))
     while sample_label < len(labels_prediction):
         if np.array_equal(labels_prediction[sample_label],[0.,0.,1.]):
             txt_labels_prediction.append("Cefixime Resistant")
@@ -91,7 +89,7 @@ def text(labels_prediction):
         elif np.array_equal(labels_prediction[sample_label],[1.,1.,0.]):
             txt_labels_prediction.append("Azithromycin and Ciprofloxacin Resistant")
         elif np.array_equal(labels_prediction[sample_label],[0.,1.,1.]):
-            txt_labels_prediction.append("Azithromycin and Cefixime Resistant")
+            txt_labels_prediction.append("Ciprofloxacin and Cefixime Resistant")
         elif np.array_equal(labels_prediction[sample_label],[1.,0.,1.]):
             txt_labels_prediction.append("Azithromycin and Cefixime Resistant")
         elif np.array_equal(labels_prediction[sample_label],[1.,1.,1.]):
@@ -101,11 +99,19 @@ def text(labels_prediction):
         sample_label = sample_label + 1
     return txt_labels_prediction;
 t_labels_prediction = text(labels_prediction)
-print(t_labels_prediction)
+
 t_labels_test= text(labels_test)
 print(pd.crosstab(t_labels_test,t_labels_prediction,rownames=['Actual resistance'],colnames=['Predicted resistance']))
+
+joblib.dump(rf,"./random_forest.joblib")
+loaded_rf = joblib.load("./random_forest.joblib")
+loaded_pred= loaded_rf.predict(features_test)
+t_loaded_pred = text(loaded_pred)
+print(pd.crosstab(t_labels_test,t_loaded_pred,rownames=['Actual resistance'],colnames=['Predicted resistance']))
+
+
             
-#Metrics
+#Metrics from binary classification
 #accuracy = accuracy_score(labels_prediction, labels_test)
 #precision = precision_score(labels_test, labels_prediction) 
 #recall = recall_score(labels_test,labels_prediction)
