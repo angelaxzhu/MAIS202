@@ -1,0 +1,30 @@
+*{
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body{
+    display: flexbox;
+    align-items: center;
+    padding: 20vw;
+    padding-top: 5vw;
+}
+
+.bar{
+    display: flex;
+    flex-direction:row;
+}
+
+#results_grid{
+    display:grid;
+    grid-template-rows: 100px 100px 100px;
+
+}
+button{
+    margin-left: 5px;
+}
+
+.row{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

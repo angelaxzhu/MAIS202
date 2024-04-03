@@ -69,7 +69,7 @@ features_train, features_test, labels_train, labels_test = train_test_split(proc
 rf = RandomForestClassifier()
 rf.fit(features_train,labels_train)
 
-#Save weights somewhere 
+
 
 #Predict with testing set
 labels_prediction = rf.predict(features_test)
@@ -121,3 +121,4 @@ print(pd.crosstab(t_labels_test,t_loaded_pred,rownames=['Actual resistance'],col
 #c_m = confusion_matrix(labels_test,labels_prediction)
 #ConfusionMatrixDisplay(confusion_matrix=c_m).plot()
 #plt.show()
+

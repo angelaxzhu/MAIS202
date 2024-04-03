@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "{{url_for('static',filename='style.css')}}"
+    <title>Antibiotic Resistance Determinator</title>
+</head>
+<body>
+    <div id = "header"> 
+        <h1>Strain Analyzer</h1>
+    </div>
+    <div id = "background"> 
+        <h2> Background</h2>
+        <text> Bacteria are pretty cool, but not when they are antibiotic resistant. To help doctors figure out what antibiotics to prescribe, we can analyze the DNA sequence of the bacteria and determine which antibiotics they are immune against. </text>
+    </div>
+    <div id = "search"> 
+        <h2> Analyze your strain </h2>
+        <div class = "bar"> 
+            <form> 
+                <input type ="text" value ="Enter Sequence">
+            </form>
+            <button> Analyze </button>
+        </div>
+    </div>
+        
+    <div id = "results"> 
+        <h2> Results </h2>
+        <div id = "results_grid">
+            <div class= "row"> 
+                <div class = "anti_name"> Azythromycin</div>
+                <div class = "status"> {{result_azm}}</div>
+            </div>
+
+            <div class = "row"> 
+                <div class = "anti_name"> Cefixime</div>
+                <div class = "status"> {{result_cfx}}</div>
+            </div>
+
+            <div class = "row"> 
+                <div class = "anti_name"> Ciprofloxacin</div>
+                <div class = "status"> {{result_cip}} </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
