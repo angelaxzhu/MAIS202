@@ -38,7 +38,7 @@ def train_azm():
     #Training the model
     rf = RandomForestClassifier()
     rf.fit(features_train,labels_train)
-    joblib.dump(rf,"./random_forest_azm.joblib")
+    joblib.dump(rf,"./Model/random_forest_azm.joblib")
 
 
     #Predict with testing set
@@ -94,7 +94,7 @@ def train_cip():
     rf = RandomForestClassifier()
     rf.fit(features_train,labels_train)
 
-    joblib.dump(rf,"./random_forest_cip.joblib")
+    joblib.dump(rf,"./Model/random_forest_cip.joblib")
 
     #Predict with testing set
     labels_prediction = rf.predict(features_test)
@@ -151,13 +151,11 @@ def train_cfx():
     #Splitting the data
     features_train, features_test, labels_train, labels_test = train_test_split(processed_features,processed_labels,test_size=0.67) 
    
-    labels_train2=labels_train.tolist()
-
     
     #Training the model
     rf_cfx = RandomForestClassifier()
     rf_cfx.fit(features_train,labels_train)  
-    joblib.dump(rf_cfx,"./random_forest_cfx.joblib")    
+    joblib.dump(rf_cfx,"./Model/random_forest_cfx.joblib")    
 
 
     #Predict with testing set

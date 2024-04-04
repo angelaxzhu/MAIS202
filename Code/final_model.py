@@ -6,12 +6,9 @@ import pandas as pd
 
 def predict_azm(seq):
     unitigs = find_unitigs(seq,"azm")
-    print(unitigs)
     arr_unitigs=np.array(unitigs)
-    print("arr",arr_unitigs)
     twoarr_unitigs = arr_unitigs.reshape(1,-1)
-    print("reshape",twoarr_unitigs)
-    loaded_rf = joblib.load("./random_forest_azm.joblib")
+    loaded_rf = joblib.load("./Model/random_forest_azm.joblib")
     result = loaded_rf.predict(twoarr_unitigs)
     if result == 1:
         result_w = "Resistant"
@@ -25,7 +22,7 @@ def predict_cfx(seq):
     unitigs = find_unitigs(seq,"cfx")
     arr_unitigs=np.array(unitigs)
     twoarr_unitigs = arr_unitigs.reshape(1,-1)
-    loaded_rf = joblib.load("./random_forest_cfx.joblib")
+    loaded_rf = joblib.load("./Model/random_forest_cfx.joblib")
     result = loaded_rf.predict(twoarr_unitigs)
     if result == 1:
         result_w = "Resistant"
@@ -39,7 +36,7 @@ def predict_cip(seq):
     unitigs = find_unitigs(seq,"cip")
     arr_unitigs=np.array(unitigs)
     twoarr_unitigs = arr_unitigs.reshape(1,-1)
-    loaded_rf = joblib.load("./random_forest_cip.joblib")
+    loaded_rf = joblib.load("./Model/random_forest_cip.joblib")
     result = loaded_rf.predict(twoarr_unitigs)
     if result == 1:
         result_w = "Resistant"
@@ -110,17 +107,31 @@ def model_test(seq):
 
     return results
 
-#make test sample for azm 
+#make test sample
 def generate_test():
     seq=""
-    unitigs_l = pd.read_csv('Data\zm_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col=0)
-    unitigs_list = (unitigs_l['SRR1661154']).tolist()
-    unitigs_n = unitigs_l.index.values.tolist()  
+    unitigs_l_cip = pd.read_csv('Data\cip_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col=0)
+    unitigs_l_azm = pd.read_csv('Data\zm_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col=0)
+    unitigs_l_cfx = pd.read_csv('Data\cfx_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col=0)
+    unitigs_list_cip = (unitigs_l_cip['SRR1661209']).tolist()
+    unitigs_list_azm = (unitigs_l_azm['SRR1661209']).tolist()
+    unitigs_list_cfx = (unitigs_l_cfx['SRR1661209']).tolist()
+    unitigs_n_cip = unitigs_l_cip.index.values.tolist()  
+    unitigs_n_azm = unitigs_l_azm.index.values.tolist()  
+    unitigs_n_cfx = unitigs_l_cfx.index.values.tolist()  
+    unitigs_list = unitigs_list_cip + unitigs_list_azm + unitigs_list_cfx
+    unitigs_n = unitigs_n_cip + unitigs_n_azm + unitigs_n_cfx
+    #print('names',unitigs_n)
     i = 0
     while i < len(unitigs_list):
         if unitigs_list[i]==1:
             seq = seq + unitigs_n[i]
         i = i + 1
+    
+    s = open(r'.\Data\test_sequence.txt','w')
+    s.write(seq)
+    s.close()
 
     return seq
 
+generate_test()
