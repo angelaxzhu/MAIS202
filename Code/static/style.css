@@ -28,3 +28,18 @@ button{
     flex-direction: row;
     justify-content: space-between;
 }
+
+#sequence{
+    width: 100%;
+    overflow-wrap:anywhere;
+
+}
+
+#seq_box{
+    margin-top: 10px;
+    height: 10vw;
+    overflow-y:scroll;
+}
+form{
+    width: 100%;
+}

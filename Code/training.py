@@ -1,3 +1,4 @@
+import math
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -15,17 +16,11 @@ def train_azm():
 
 
     #2. Remove N/A 
-    to_delete =[]
-    s = 0 
-    while s < len(labels_azm): #gives the number of rows --> number of samples
-        if np.isnan(labels_azm.loc[s].at["azm_sr"]) :
-            to_delete.append(labels_azm.loc[s].at["Sample_ID"])
-            labels_azm.drop(index=s,inplace=True)
-        s = s +1
+    n_labels_azm=labels_azm.dropna()
 
     #3. inner join between the two dataframes to only keep complete data
     transposed_features_azm = features_azm.transpose();
-    joined = pd.merge(labels_azm,transposed_features_azm,how='inner',left_on="Sample_ID",right_index=True)
+    joined = pd.merge(n_labels_azm,transposed_features_azm,how='inner',left_on="Sample_ID",right_index=True)
 
 
     #4. un-join to separate into X and Y
@@ -60,6 +55,7 @@ def train_azm():
     c_m = confusion_matrix(labels_test,labels_prediction)
     ConfusionMatrixDisplay(confusion_matrix=c_m).plot()
     plt.show()
+    
     #save unitigs
     with open(r'.\Data\azm_unitigs.txt','w') as file:
         for unitig in unitigs:
@@ -75,17 +71,11 @@ def train_cip():
 
 
     #2. Remove N/A 
-    to_delete =[]
-    s = 0 
-    while s < len(labels_azm): #gives the number of rows --> number of samples
-        if np.isnan(labels_azm.loc[s].at["cip_sr"]) :
-            to_delete.append(labels_azm.loc[s].at["Sample_ID"])
-            labels_azm.drop(index=s,inplace=True)
-        s = s +1
+    n_labels_azm=labels_azm.dropna()
 
     #3. inner join between the two dataframes to only keep complete data
     transposed_features_azm = features_azm.transpose();
-    joined = pd.merge(labels_azm,transposed_features_azm,how='inner',left_on="Sample_ID",right_index=True)
+    joined = pd.merge(n_labels_azm,transposed_features_azm,how='inner',left_on="Sample_ID",right_index=True)
 
 
     #4. un-join to separate into X and Y
@@ -120,25 +110,34 @@ def train_cip():
     c_m = confusion_matrix(labels_test,labels_prediction)
     ConfusionMatrixDisplay(confusion_matrix=c_m).plot()
     plt.show()
+
+    #save unitigs
+    with open(r'.\Data\cip_unitigs.txt','w') as file:
+        for unitig in unitigs:
+            file.write("%s\n" % unitig)
+    file.close()
+
     return unitigs
 def train_cfx():
      #1. Load data
-    labels_azm = pd.read_csv('Data\metadata.csv',usecols=["Sample_ID","cfx_sr"])
-    features_azm = pd.read_csv('Data\cfx_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col=0)
+    labels_cfx = pd.read_csv('Data\metadata.csv',usecols=["Sample_ID","cfx_sr"])
+    features_cfx = pd.read_csv('Data\cfx_sr_gwas_filtered_unitigs.Rtab',sep=' ',index_col=0)
 
 
     #2. Remove N/A 
     to_delete =[]
     s = 0 
-    while s < len(labels_azm): #gives the number of rows --> number of samples
-        if np.isnan(labels_azm.loc[s].at["cfx_sr"]) :
-            to_delete.append(labels_azm.loc[s].at["Sample_ID"])
-            labels_azm.drop(index=s,inplace=True)
-        s = s +1
 
+    #while s < len(labels_cfx): #gives the number of rows --> number of samples WRONG!! REMOVING MESSES UP THE INDICES!!
+        #if np.isnan(labels_cfx.loc[s].at["cfx_sr"]) :
+          #  to_delete.append(labels_cfx.loc[s].at["Sample_ID"])
+         #   labels_cfx.drop(index=s,inplace=True)
+        #s = s +1
+    n_labels_cfx=labels_cfx.dropna()
+ 
     #3. inner join between the two dataframes to only keep complete data
-    transposed_features_azm = features_azm.transpose();
-    joined = pd.merge(labels_azm,transposed_features_azm,how='inner',left_on="Sample_ID",right_index=True)
+    transposed_features_azm = features_cfx.transpose();
+    joined = pd.merge(n_labels_cfx,transposed_features_azm,how='inner',left_on="Sample_ID",right_index=True)
 
 
     #4. un-join to separate into X and Y
@@ -151,17 +150,20 @@ def train_cfx():
 
     #Splitting the data
     features_train, features_test, labels_train, labels_test = train_test_split(processed_features,processed_labels,test_size=0.67) 
-    
+   
+    labels_train2=labels_train.tolist()
 
+    
     #Training the model
-    rf = RandomForestClassifier()
-    rf.fit(features_train,labels_train)  
-    joblib.dump(rf,"./random_forest_cfx.joblib")    
+    rf_cfx = RandomForestClassifier()
+    rf_cfx.fit(features_train,labels_train)  
+    joblib.dump(rf_cfx,"./random_forest_cfx.joblib")    
 
 
     #Predict with testing set
-    labels_prediction = rf.predict(features_test)
+    labels_prediction = rf_cfx.predict(features_test)
     print(labels_prediction)
+    
 
     #Metrics
     accuracy = accuracy_score(labels_prediction, labels_test)
@@ -173,8 +175,13 @@ def train_cfx():
     c_m = confusion_matrix(labels_test,labels_prediction)
     ConfusionMatrixDisplay(confusion_matrix=c_m).plot()
     plt.show()
+    #save unitigs
+    with open(r'.\Data\cfx_unitigs.txt','w') as file:
+        for unitig in unitigs:
+            file.write("%s\n" % unitig)
+    file.close()
     return unitigs
    
 train_azm()
-# #train_cip()
-#train_cfx()
+train_cip()
+train_cfx()
