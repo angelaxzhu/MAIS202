@@ -1,7 +1,7 @@
 # MAIS202
 Uses the following dataset: https://www.kaggle.com/datasets/nwheeler443/gono-unitigs/data. <br> <br>
 After obtaining the sequencing data of the bacterial strain a patient is afflicted by, the health care practitioner could paste it into the web app, and it will determine if the strain has resistance against Azythromycin, Cefixime, and/or Ciprofloxacin. The practitioner can then prescribe the appropriate medication.
-<br> 
+<br> <br>
 Final project of the MAIS202 Bootcamp. 
 
 # Web App
@@ -30,6 +30,7 @@ In general, there was better accuracy than precision and recall. In other words,
 - Accuracy: 0.9960508995173322
 - Precision: 0.0
 - Recall: 0.0
+<br>
 Note: For cefixime, the dataset only five samples that are cefixime resistant, when splitting the dataset, it's possible that none were sorted in the testing set, which is why there are no true positives in the confusion matrix.
 
 # Future Works
