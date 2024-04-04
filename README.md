@@ -36,4 +36,4 @@ Note: For cefixime, the dataset only five samples that are cefixime resistant, w
 # Future Works
 - Change the colour of text if it's resistant/ non-resistant
 - Include other factors like geography
-- Extend to other drugs
+- Extend to other drugs => find a way to find appropriate unitigs 
